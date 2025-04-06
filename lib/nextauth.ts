@@ -4,8 +4,6 @@ import { prisma } from "./db";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-
-
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
 
@@ -59,14 +57,13 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     Google({
-        clientId: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
+      clientId: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
     }),
+    // Add other providers here, e.g., GitHub
   ],
 };
 
-export const getAuthSession = () =>{
-  return(
-    getServerSession(authOptions)
-  )
+export const getAuthSession = () => {
+  return getServerSession(authOptions);
 }
