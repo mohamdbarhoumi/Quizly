@@ -6,7 +6,7 @@ import { getAuthSession } from "@/lib/nextauth";
 
 export const POST = async (req: Request) => {
   try {
-    const session = await getAuthSession();
+    /*const session = await getAuthSession();
     if(!session?.user){
         return NextResponse.json(
             {
@@ -16,7 +16,7 @@ export const POST = async (req: Request) => {
                 status:401,
             }
         )
-    }
+    }*/
     const body = await req.json();
     const { amount, topic, type } = quizCreationSchema.parse(body);
 

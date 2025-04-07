@@ -4,7 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
-
+import Providers from "@/components/providers";
 // Initialize the fonts with correct variables
 const geistSans = Geist({
   variable: "--font-geist-sans",  // Define the variable for Geist font
@@ -40,6 +40,7 @@ export default function RootLayout({
           'antialiased min-h-screen pt-16'
         )}
       >
+        <Providers>
         <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -49,6 +50,7 @@ export default function RootLayout({
             <Navbar />
             {children}
           </ThemeProvider>
+          </Providers>
       </body>
     </html>
   );
