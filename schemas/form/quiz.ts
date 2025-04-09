@@ -6,3 +6,11 @@ export const quizCreationSchema = z.object({
     type: z.enum(["mcq", "open_ended"]),
     
 });
+
+
+export const checkAnswerSchema = z.object({
+    questionId: z.string(),
+    userAnswer: z.string(),
+});
+
+export { z } from "zod";

@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/navbar";
 import Providers from "@/components/providers";
-// Initialize the fonts with correct variables
+import { Toaster } from "@/components/ui/sonner";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",  // Define the variable for Geist font
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default function RootLayout({
           >
             <Navbar />
             {children}
+            <Toaster />
           </ThemeProvider>
           </Providers>
       </body>
