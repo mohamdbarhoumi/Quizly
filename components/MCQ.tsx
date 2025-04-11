@@ -35,8 +35,8 @@ const MCQ = ({game}: Props) => {
     const {mutate: checkAnswer, isPending: isChecking} = useMutation({
         mutationFn: async() =>{
             const payload = checkAnswerSchema.parse({
-                questionId: currentQuestion.id, // Optional chaining
-                userAnswer: options[selectedChoice]
+                questionId: currentQuestion.id,
+                userInput: options[selectedChoice]
             });
             const response = await axios.post('/api/checkAnswer', payload);
             return response.data;
@@ -49,20 +49,28 @@ const MCQ = ({game}: Props) => {
             return;
         }
         checkAnswer(undefined, {
-            onSuccess: ({isCorrect}) =>{
-                if(isCorrect){
-                    toast.success("Correct!")
-                    setCorrectAnswers((prev) => prev + 1);
+            onSuccess: ({isCorrect, percentageSimilar}) => {
+                if(isCorrect !== undefined) {
+                    toast.success(isCorrect ? "Correct!" : "Wrong!");
+                    setCorrectAnswers(prev => isCorrect ? prev + 1 : prev);
+                    setWrongAnswers(prev => !isCorrect ? prev + 1 : prev);
                 }
-                else{
-                    toast.error("Wrong!");
-                    setWrongAnswers((prev) => prev + 1);
+                
+                // Reset selection and move to next question
+                setSelectedChoice(0); // Reset to first option or undefined
+                if (questionIndex < game.questions.length - 1) {
+                    setQuestionIndex(prev => prev + 1);
+                } else {
+                    toast.success("Quiz completed!");
+                    // Handle quiz completion here
                 }
-                setQuestionIndex((prev) => prev + 1);
-
             },
+            onError: (error) => {
+                toast.error("An error occurred");
+                console.error(error);
+            }
         });
-    }, [checkAnswer,toast])
+    }, [checkAnswer, selectedChoice, questionIndex, game.questions.length]);
 
     const options = React.useMemo(()=>{
         if(!currentQuestion) return []
@@ -80,7 +88,7 @@ const MCQ = ({game}: Props) => {
                 </div>
 
                 <div>
-                    <MCQCounter correctAnswers={correctAnswers} wrongAnswers={wrongAnswers}/>
+                    <MCQCounter correct_answers={correctAnswers} wrong_answers={wrongAnswers}/>
                 </div>
 
             
@@ -117,10 +125,10 @@ const MCQ = ({game}: Props) => {
                         </Button>
                     );
                 })}
-                <Button className="mt-2" onClick={()=>{
-                    handleNext();
-                }}>
-                    Next <ChevronRight className="w-4 h-4 ml-2" />
+                <Button className="mt-2" onClick={handleNext}
+    disabled={isChecking}>
+                    {isChecking ? "Checking..." : "Next"} 
+                    <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
                 
             </div>
@@ -131,4 +139,3 @@ const MCQ = ({game}: Props) => {
 }
 
 export default MCQ
-
