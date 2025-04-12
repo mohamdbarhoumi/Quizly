@@ -1,26 +1,52 @@
 import React from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import CustomWordCloud from "./customWordCloud";
+import { prisma } from "@/lib/db";
+import { TopicType } from "@/components/customWordCloud.types";
 
-type Props = {}
+const HotTopicsCard = async () => {
+  const topics = await prisma.topicCount.findMany({
+    orderBy: {
+      count: "desc"
+    },
+    take: 50
+  });
 
-const HotTopicsCard = (props: Props) => {
-    const wordCloudWidth = 800; // Set a fixed width for the word cloud
-    const wordCloudHeight = 400; // Set a fixed height for the word cloud
+  const formattedTopics: TopicType[] = topics.map((topic) => ({
+    text: topic.topic,
+    value: topic.count,
+  }));
 
-    return (
-        <Card className="col-span-4">
-            <CardHeader>
-                <CardTitle className="text-2xl font-bold">Hot Topics</CardTitle>
-                <CardDescription>
-                    Click on a topic to start a quiz on it!
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="pl-2">
-                <CustomWordCloud width={wordCloudWidth} height={wordCloudHeight} />
-            </CardContent>
-        </Card>
-    );
-}
+  return (
+    <Card className="col-span-4 h-full">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">Trending Topics</CardTitle>
+        <CardDescription>
+          Click on any topic to begin a new quiz
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="h-[400px] flex items-center justify-center p-4">
+        {formattedTopics.length > 0 ? (
+          <CustomWordCloud 
+            topics={formattedTopics}
+            width={600}
+            height={400}
+            className="w-full h-full"
+          />
+        ) : (
+          <p className="text-muted-foreground text-center">
+            No topics available yet. Start quizzing to generate trends!
+          </p>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
 
 export default HotTopicsCard;

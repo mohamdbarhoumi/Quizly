@@ -6,11 +6,12 @@ import { signIn } from "next-auth/react";
 
 type Props = {
     text: string;
+    className: string;
 };
 
-const SignInButton = ({text}: Props) => {
+const SignInButton = ({text, className}: Props) => {
     return(
-        <Button onClick={()=>{ 
+        <Button className={className} onClick={()=>{ 
             signIn("google").catch(console.error);
             }}>
             {text}

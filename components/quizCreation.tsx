@@ -21,6 +21,8 @@ import { Separator } from "@/components/ui/separator";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import LoadingQuestion from "./LoadingQuestions";
+import LoadingQuestions from "./LoadingQuestions";
 
 type Props = {};
 type Input = z.infer<typeof quizCreationSchema>;
@@ -32,6 +34,8 @@ interface ApiResponse {
 
 const QuizCreation = (props: Props) => {
   const router = useRouter();
+  const [showLoader, setShowLoader] = React.useState(false);
+  const [finishedLoading, setFinishedLoading] = React.useState(false);
   const {
     mutate: getQuestions,
     isPending: isLoading,
@@ -55,7 +59,6 @@ const QuizCreation = (props: Props) => {
     },
     onError: (error) => {
       console.error("Error creating quiz:", error);
-      // You can add toast notifications here if needed
     }
   });
   
@@ -69,6 +72,7 @@ const QuizCreation = (props: Props) => {
   });
 
   function onSubmit(input: Input) {
+    setShowLoader(true);
     getQuestions({
       amount: input.amount,
       topic: input.topic,
@@ -84,6 +88,9 @@ const QuizCreation = (props: Props) => {
   }
 
   form.watch();
+  if (showLoader) {
+    return <LoadingQuestions finished={finishedLoading} />;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -130,7 +137,7 @@ const QuizCreation = (props: Props) => {
                         }}
                       />
                     </FormControl>
-                    <FormDescription>Please provide a topic</FormDescription>
+                    <FormDescription>Please provide the number of questions</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
