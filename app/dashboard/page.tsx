@@ -1,5 +1,5 @@
 import HistoryCard from "@/components/historyCard";
-import HotTopicsCard from "@/components/hostTopicsCard";
+import HotTopicsCard from "@/components/hotTopicsCard";
 import QuizMeCard from "@/components/quizMeCard";
 import RecentActivities from "@/components/recentActivities";
 import { getAuthSession } from "@/lib/nextauth";
