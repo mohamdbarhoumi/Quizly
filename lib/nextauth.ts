@@ -4,14 +4,19 @@ import { prisma } from "./db";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
+// Ensure required environment variables are set
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+
+if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
+  throw new Error("Missing Google OAuth environment variables");
+}
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
       id: string;
-    } & DefaultSession['user']
+    } & DefaultSession['user'];
   }
 }
 
@@ -27,40 +32,58 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      // If a user is returned after signing in, assign their ID to the token
-      if (user) {
+      // First login (when user is returned)
+      if (user?.id) {
         token.id = user.id;
-      } else {
-        // Look up the user from the database if there's an existing token
-        const db_user = await prisma.user.findFirst({
-          where: {
-            email: token?.email,
-          },
-        });
-        if (db_user) {
-          token.id = db_user.id;
+        token.picture = user.image ?? null;
+        return token;
+      }
+    
+      // If user not returned but token exists, look up from DB only if needed
+      if (!token.id && token.email) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: token.email },
+          });
+    
+          if (dbUser) {
+            token.id = dbUser.id;
+            token.picture = dbUser.image ?? null;
+          }
+        } catch (error) {
+          console.error("Error fetching user from DB in JWT callback:", error);
         }
       }
+    
       return token;
     },
+    
     session: ({ session, token }) => {
-      if (token) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.name = token.name ?? session.user.name;
+        session.user.email = token.email ?? session.user.email;
+        session.user.image = token.picture ?? session.user.image;
       }
       return session;
     },
+    
   },
-  secret: process.env.NEXTAUTH_SECRET,  
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
     Google({
       clientId: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
+      },
     }),
-    // Add other providers here, e.g., GitHub
+    // Add other providers here, e.g., GitHub (if needed)
   ],
 };
 
