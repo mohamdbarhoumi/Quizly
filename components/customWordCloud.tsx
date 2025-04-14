@@ -64,7 +64,7 @@ const CustomWordCloud = ({
         .enter()
         .append('text')
         .style('font-size', d => `${d.size}px`)
-        .style('fill', theme === 'dark' ? '#ffffff' : '#000000')
+        .style('fill', theme === 'dark' ? '#FFFFFF' : '#000000')
         .style('font-family', 'sans-serif')
         .style('cursor', 'pointer')
         .attr('text-anchor', 'middle')

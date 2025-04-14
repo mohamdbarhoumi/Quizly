@@ -27,7 +27,7 @@ export default async function Home() {
           Create Smart Quizzes in Seconds
         </h1>
         <p className="text-muted-foreground max-w-xl mb-8">
-          Quizzzy lets you build quizzes instantly using AI – for teachers, learners, teams, and curious minds.
+          Quizly lets you build quizzes instantly using AI – for teachers, learners, teams, and curious minds.
         </p>
         <SignInButton
           text="Sign In with Google"
@@ -67,7 +67,7 @@ export default async function Home() {
             <span className="font-bold">2.</span> Type a topic or subject.
           </li>
           <li>
-            <span className="font-bold">3.</span> Let Quizzzy generate a quiz instantly using AI.
+            <span className="font-bold">3.</span> Let Quizly generate a quiz instantly using AI.
           </li>
           <li>
             <span className="font-bold">4.</span> Share or take the quiz – learn, compete, or revise!
@@ -90,7 +90,7 @@ export default async function Home() {
               <p className="text-muted-foreground italic">
                 "Finally, a tool that makes studying feel like a game. 10/10!"
               </p>
-              <p className="mt-4 font-semibold">— Yassine, University Student</p>
+              <p className="mt-4 font-semibold">— Bayram, University Student</p>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="py-10 px-6 text-center text-sm text-muted-foreground border-t border-border mt-10">
-        <p>© {new Date().getFullYear()} Quizzzy. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Quizly. All rights reserved.</p>
         <div className="mt-2 space-x-4">
           <a href="#" className="hover:underline">Privacy</a>
           <a href="#" className="hover:underline">Terms</a>
