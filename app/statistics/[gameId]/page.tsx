@@ -8,17 +8,20 @@ import React from "react";
 import ResultsCard from "@/components/statistics/ResultsCard";
 import QuestionsList from "@/components/statistics/QuestionsList";
 
-type Props = {
-  params: {
-    gameId: string;
-  };
-};
+// Make params a Promise that resolves to the actual object
+interface PageProps {
+  params: Promise<{ gameId: string }>;
+}
 
-const Statistics = async ({ params: { gameId } }: Props) => {
+const Statistics = async ({ params }: PageProps) => {
+  // Await the params to extract gameId
+  const { gameId } = await params;
+
   const session = await getAuthSession();
   if (!session?.user) {
     return redirect("/");
   }
+
   const game = await prisma.game.findUnique({
     where: { id: gameId },
     include: { questions: true },
@@ -29,6 +32,7 @@ const Statistics = async ({ params: { gameId } }: Props) => {
 
   let accuracy: number = 0;
 
+  // Calculate accuracy for different game types
   if (game.gametype === "mcq") {
     let totalCorrect = game.questions.reduce((acc, question) => {
       if (question.isCorrect) {
@@ -43,6 +47,8 @@ const Statistics = async ({ params: { gameId } }: Props) => {
     }, 0);
     accuracy = totalPercentage / game.questions.length;
   }
+
+  // Round accuracy to two decimal places
   accuracy = Math.round(accuracy * 100) / 100;
 
   return (
@@ -67,7 +73,7 @@ const Statistics = async ({ params: { gameId } }: Props) => {
       <div className="mt-6">
         <ResultsCard accuracy={accuracy} />
       </div>
-      
+
       <div className="mt-8">
         <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
           Question Breakdown
