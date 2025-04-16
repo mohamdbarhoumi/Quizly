@@ -27,29 +27,29 @@ To run Quizly locally, follow these steps:
 bash
 Copy
 Edit
-git clone https://github.com/mohamdbarhoumi/Quizly.git
-cd quizly
+`git clone https://github.com/mohamdbarhoumi/Quizly.git`
+`cd quizly`
 2. Install dependencies
 bash
 Copy
 Edit
-npm install
+`npm install`
 3. Set up environment variables
 Create a .env.local file in the root directory and add your credentials:
 
 env
 Copy
 Edit
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_secret_key
+`NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret_key`
 
-SUPABASE_URL=your_supabase_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
+`SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key`
 4. Run the development server
 bash
 Copy
 Edit
-npm run dev
+`npm run dev`
 Visit http://localhost:3000 in your browser.
 
 🧪 Usage
