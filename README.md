@@ -64,7 +64,7 @@ npm run dev
 ```
 Visit http://localhost:3000 in your browser.
 
-**🧪 Usage**
+**🧪 Usage**-
 Log in using your Google account (or any other supported provider).
 
 Enter a topic and generate a quiz instantly.
