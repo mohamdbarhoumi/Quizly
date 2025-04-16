@@ -21,7 +21,7 @@ const History = async ({ limit, userId }: Props) => {
   });
   return (
     <div className="space-y-8">
-      {games.map((game) => {
+      {games.map((game: { id: React.Key | null | undefined; gametype: string; topic: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined; timeEnded: any; }) => {
         return (
           <div className="flex items-center justify-between" key={game.id}>
             <div className="flex items-center">

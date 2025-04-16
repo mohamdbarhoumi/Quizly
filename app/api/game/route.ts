@@ -45,7 +45,7 @@ export async function POST(req: Request) {
     let gameId: string;
     try {
       // Extended transaction with higher timeout
-      const result = await prisma.$transaction(async (prisma) => {
+      const result = await prisma.$transaction(async (prisma: { game: { create: (arg0: { data: { gametype: "mcq" | "open_ended"; timeStarted: Date; userId: string; topic: string; }; }) => any; }; topicCount: { upsert: (arg0: { where: { topic: string; }; create: { topic: string; count: number; }; update: { count: { increment: number; }; }; }) => any; }; question: { createMany: (arg0: { data: any; }) => any; }; }) => {
         // Create game record
         const game = await prisma.game.create({
           data: {

@@ -34,7 +34,7 @@ const Statistics = async ({ params }: PageProps) => {
 
   // Calculate accuracy for different game types
   if (game.gametype === "mcq") {
-    let totalCorrect = game.questions.reduce((acc, question) => {
+    let totalCorrect = game.questions.reduce((acc: number, question: { isCorrect: any; }) => {
       if (question.isCorrect) {
         return acc + 1;
       }
@@ -42,7 +42,7 @@ const Statistics = async ({ params }: PageProps) => {
     }, 0);
     accuracy = (totalCorrect / game.questions.length) * 100;
   } else if (game.gametype === "open_ended") {
-    let totalPercentage = game.questions.reduce((acc, question) => {
+    let totalPercentage = game.questions.reduce((acc: any, question: { percentageCorrect: any; }) => {
       return acc + (question.percentageCorrect ?? 0);
     }, 0);
     accuracy = totalPercentage / game.questions.length;

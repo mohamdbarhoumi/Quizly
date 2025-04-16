@@ -18,7 +18,7 @@ const HotTopicsCard = async () => {
     take: 50
   });
 
-  const formattedTopics: TopicType[] = topics.map((topic) => ({
+  const formattedTopics: TopicType[] = topics.map((topic: { topic: any; count: any; }) => ({
     text: topic.topic,
     value: topic.count,
   }));
